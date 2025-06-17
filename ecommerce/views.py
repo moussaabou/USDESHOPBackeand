@@ -168,35 +168,24 @@ def login_view(request):
 
 # تسجيل بائع جديد
 @csrf_exempt
-@csrf_exempt
 def register_seller(request):
     if request.method == "POST":
         try:
             # الحصول على البيانات من FormData
-            name = request.POST.get('name')
-            surname = request.POST.get('surname')
-            phone_number = request.POST.get('phone_number')
-            email = request.POST.get('email')
-            address = request.POST.get('address')
-            birth_date = request.POST.get('birth_date')
-            password = request.POST.get('password')
-
-            # التحقق من أن كل الحقول المطلوبة موجودة
-            if not all([name, surname, phone_number, email, address, birth_date, password]):
-                return JsonResponse({'error': 'يرجى ملء جميع الحقول المطلوبة'}, status=400)
-
-            # التحقق من عدم تكرار الإيميل
-            if Seller.objects.filter(email=email).exists():
-                return JsonResponse({'error': 'البريد الإلكتروني مستخدم بالفعل'}, status=400)
+            name = request.POST['name']
+            surname = request.POST['surname']
+            phone_number = request.POST['phone_number']
+            email = request.POST['email']
+            address = request.POST['address']
+            birth_date = request.POST['birth_date']
+            password = request.POST['password']
 
             # التعامل مع الصورة (إذا كانت موجودة)
-            profile_picture = request.FILES.get('profile_picture')
+            profile_picture = request.FILES.get('profile_picture', None)
             if not profile_picture:
-                # تحميل صورة افتراضية من مجلد media
-                default_image_path = os.path.join('seller_pics', 'default.jpg')  # تأكد من وجود هذه الصورة
-                profile_picture = default_image_path
+                # إذا لم يتم إرسال صورة، يمكن تعيين صورة افتراضية
+                profile_picture = 'PIO.jpg'  # اسم الصورة الافتراضية
 
-            # إنشاء البائع
             seller = Seller.objects.create(
                 name=name,
                 surname=surname,
@@ -204,16 +193,14 @@ def register_seller(request):
                 email=email,
                 address=address,
                 birth_date=birth_date,
-                password=password,  # ⚠️ يُفضّل تشفير كلمة المرور قبل الحفظ
-                profile_picture=profile_picture,
+                password=password,
+                profile_picture=profile_picture,  # تعيين الصورة
             )
 
             return JsonResponse({'type': 'seller', 'id': seller.id})
-
+        
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
-    
-    return JsonResponse({'error': 'الطريقة غير مدعومة'}, status=405)
 # عرض منتجات بائع معين
 
 @csrf_exempt  # تعطيل CSRF لهذه الدالة
