@@ -5,10 +5,10 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # السرية
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-yk%ob9##xs@7+&gz(3_$qggvzw06gpek3ji9=0r2iy@bahwgx8')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # الوضع التطويري
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'
+DEBUG=False
 
 # السماح بجميع النطاقات (غيّره في الإنتاج)
 ALLOWED_HOSTS = ['*']
@@ -71,17 +71,6 @@ DATABASE_URL = os.environ.get('DATABASE_URL')
 if DATABASE_URL:
     DATABASES = {
         'default': dj_database_url.parse(DATABASE_URL)
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'ecommercebd',
-            'USER': 'root',
-            'PASSWORD': '',
-            'HOST': 'localhost',
-            'PORT': '3306',
-        }
     }
 
 # التحقق من كلمات المرور
