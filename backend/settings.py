@@ -1,9 +1,6 @@
 import os
 from pathlib import Path
 import dj_database_url
-from dotenv import load_dotenv
-
-load_dotenv()  # في حالة استخدام .env محليًا
 
 # المسار الأساسي للمشروع
 BASE_DIR = Path(__file__).resolve().parent.parent
