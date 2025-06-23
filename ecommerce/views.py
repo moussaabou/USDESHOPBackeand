@@ -346,3 +346,46 @@ def update_seller_profile(request, seller_id):
 
         seller.save()
         return JsonResponse({'message': 'تم تحديث المعلومات بنجاح'})
+#حسب التصنيف عرض  المنتجات
+@csrf_exempt
+def filtered_products(request):
+    try:
+        category = request.GET.get('category', None)
+        min_price = request.GET.get('min_price', None)
+        max_price = request.GET.get('max_price', None)
+        order = request.GET.get('order', 'asc')  # 'asc' or 'desc'
+
+        products = Product.objects.all()
+
+        if category:
+            products = products.filter(category=category)
+        if min_price:
+            products = products.filter(price__gte=min_price)
+        if max_price:
+            products = products.filter(price__lte=max_price)
+
+        if order == 'asc':
+            products = products.order_by('price')
+        else:
+            products = products.order_by('-price')
+
+        data = [
+            {
+                'id': p.id,
+                'name': p.name,
+                'description': p.description,
+                'category': p.category,
+                'price': str(p.price),
+                'images': [
+                    p.image1.url if p.image1 else None,
+                    p.image2.url if p.image2 else None,
+                    p.image3.url if p.image3 else None,
+                ],
+                'seller': p.seller.name,
+            }
+            for p in products
+        ]
+
+        return JsonResponse(data, safe=False)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
