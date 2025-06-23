@@ -389,3 +389,17 @@ def filtered_products(request):
         return JsonResponse(data, safe=False)
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+@csrf_exempt
+def seller_profile(request, seller_id):
+    try:
+        seller = Seller.objects.get(id=seller_id)
+        image_url = seller.profile_picture.url if seller.profile_picture else '/media/seller_pics/OIP.jpg'
+        full_url = request.build_absolute_uri(image_url)
+        return JsonResponse({
+            'name': seller.name,
+            'profile_picture': full_url,
+        })
+    except Seller.DoesNotExist:
+        return JsonResponse({'error': 'Seller not found'}, status=404)
+    
