@@ -39,7 +39,7 @@
 | Backend   | Django, DRF, JWT    |
 | Database  | postgresql          |
 | Hosting   | Render              |
-| Media     | Local + Cloud-ready |
+| Media     | Local + Cloudinary  |
 | Auth      | Custom (JWT-based)  |
 
 
