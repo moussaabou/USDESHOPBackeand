@@ -14,6 +14,7 @@ from rest_framework.parsers import MultiPartParser
 from django.contrib.auth.hashers import check_password
 from django.shortcuts import get_object_or_404
 import json
+from django.views.decorators.http import require_http_methods
 
 # ✅ عرض كل المنتجات مع الفلاتر
 @api_view(['GET'])
