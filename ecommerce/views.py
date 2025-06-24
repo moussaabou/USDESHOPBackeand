@@ -402,4 +402,16 @@ def seller_profile(request, seller_id):
         })
     except Seller.DoesNotExist:
         return JsonResponse({'error': 'Seller not found'}, status=404)
+@csrf_exempt
+@require_http_methods(["DELETE"])
+def delete_seller_simple(request, seller_id):
+    try:
+        seller = Seller.objects.get(id=seller_id)
+        Product.objects.filter(seller=seller).delete()
+        seller.delete()
+        return JsonResponse({'message': 'تم حذف البائع ومنتجاته'}, status=200)
+    except Seller.DoesNotExist:
+        return JsonResponse({'error': 'البائع غير موجود'}, status=404)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
     

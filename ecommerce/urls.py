@@ -18,7 +18,8 @@ from .views import (
     delete_seller,
     seller_profile,
     update_product,
-    update_seller_profile
+    update_seller_profile,
+    delete_seller_simple
 )
 
 urlpatterns = [
@@ -41,7 +42,7 @@ path('api/seller-profile/<int:seller_id>/', update_seller_profile, name='update_
 # ==== الإدارة (أدمن) ====
 path('api/sellers/', get_all_sellers, name='get-all-sellers'),
 path('api/sellers/<int:seller_id>/', delete_seller, name='delete-seller'),
-
+path('api/delete-seller-simple/<int:seller_id>/', delete_seller_simple, name='delete-seller-simple'),
 # ==== المصادقة ====
 path('api/login/', login_view, name='login'),  # تسجيل دخول مخصص
 path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),  # JWT
